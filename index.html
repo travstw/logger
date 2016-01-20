@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<Title>Hi</Title>
+		
+
+	</head>
+	<body>
+		<form>
+			<fieldset>
+				<legend>DQV Information</legend>
+				City:<br>
+				<input type="text" name="city" id="city" value="City"><br>
+				Date:<br>
+				<input type="text" name="date" id="date" value="Date"><br>
+				Personnel:<br>
+				<input type="text" name="personnel" id="personnel" value="Personnel"><br>
+				Comments:<br>
+				<input type="text" name="comments" id="comment_DQV" value = ""><br>
+			</fieldset><br>
+
+			<fieldset>
+				<legend>Firing Point One</legend>
+				Name: <input type="text" name="Name" id="name_firingPoint" value="Name">
+				Lat/Long: <input type="text" name="Lat/Long" id="latLong_firingPoint" value="Lat-Long"><br>
+				Shots: <br>
+				Weapon: <input type="text" name="Weapon" id="fp1Shot1_Weapon" value="9mm">
+				Rounds: <input type="text" name="Rounds" id="fp1Shot1_Rounds" value="3">
+				TimeStamp: <input type="text" name="TimeStamp" id="fp1Shot1_TimeStamp">
+				FlexID: <input type="text" name="FlexID" id="fp1Shot1_FlexID" value="-9999">
+				<button type="button" onclick="getTime()">Shot</button>
+				
+				
+			</fieldset>
+
+
+
+
+			
+		<form><br>
+		<button type="button" onclick="save()">Save</button>
+		
+	
+	<script src="logger.js" ></script>
+
+
+	</body>
+</html>
