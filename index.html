@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<Title>Hi</Title>
+		<Title>SST DQV Logger</Title>
 		
 
 	</head>
@@ -11,22 +11,32 @@
 			<fieldset>
 				<legend>DQV Information</legend>
 				City:<br>
-				<input type="text" name="city" id="city" value="City"><br>
+				<input type="text" name="city" id="city" value="Oakland"><br>
 				Date:<br>
-				<input type="text" name="date" id="date" value="Date"><br>
+				<input type="text" name="date" id="date" value="01232016"><br>
 				Personnel:<br>
-				<input type="text" name="personnel" id="personnel" value="Personnel"><br>
+				<input type="text" name="personnel" id="personnel" value="Scott Weiser, PJ Ramos, Ron Cayabyab"><br>
 				Comments:<br>
 				<input type="text" name="comments" id="comment_DQV" value = ""><br>
 			</fieldset><br>
 
 			<fieldset>
 				<legend>Firing Point One</legend>
-				Name: <input type="text" name="Name" id="name_firingPoint" value="Name">
-				Lat/Long: <input type="text" name="Lat/Long" id="latLong_firingPoint" value="Lat-Long"><br>
-				Shots: <br>
-				Weapon: <input type="text" name="Weapon" id="fp1Shot1_Weapon" value="9mm">
-				Rounds: <input type="text" name="Rounds" id="fp1Shot1_Rounds" value="3">
+				Name: <input type="text" name="Name" id="name_firingPoint" value="Parking Lot">
+				Lat/Long: <input type="text" name="Lat/Long" id="latLong_firingPoint" value="45.345445, -85.434343"><br>
+				Shots: <br><br>
+
+				Weapon: <select id="fp1Shot1_Weapon">
+							<option value="9mm">9mm</option>
+							<option value=".40">.40</option>
+							<option value=".45">.45</option>
+						</select>
+
+				Rounds: <select id="fp1Shot1_Rounds">
+							<option value="3">3</option>
+							<option value="1">1</option>		
+						</select>
+
 				TimeStamp: <input type="text" name="TimeStamp" id="fp1Shot1_TimeStamp">
 				FlexID: <input type="text" name="FlexID" id="fp1Shot1_FlexID" value="-9999">
 				<button type="button" onclick="getTime()">Shot</button>

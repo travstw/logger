@@ -10,13 +10,13 @@ http.createServer(function (req, res) {
 		router(req, res);
  	
 	}).listen(3000, 'localhost');
-  // }).listen(3000, 'localhost');
+
 console.log('Server running at http://127.0.0.1:3000/');
 
 //Router
 function router(req, res){
   reqObj = url.parse(req.url, false);
-  // console.log(reqObj);
+  
     
 	if(reqObj.pathname === '/'){
       res.writeHead(200, {'Content-Type': 'text/html'});
@@ -43,22 +43,34 @@ function router(req, res){
   	
     } else if(reqObj.pathname === '/submit'){
 
-          var dqvString ='';  
+        var dqvString ='';  
 
         req.on('data', function (data) {
-          console.log(data.toString());
           dqvString += data;
         });  
         
-        req.on('end', function(){
-          
-          console.log(dqvString);
+        req.on('end', function(){        
           res.end();
+          createFile(dqvString);
+
+          
         });
           
     }
 
 } 
+
+function createFile(dqvString){
+    console.log("file write");
+    var dqvJSON = JSON.parse(dqvString);
+    console.log(dqvJSON.firingPoints[0].shots[0].timestamp);
+    var outputFile = dqvJSON.city + '_' + dqvJSON.date + '.txt';
+
+    fs.appendFile(outputFile, dqvString, function(err){
+        if (err) throw err;
+    });
+
+}
 
 
 
