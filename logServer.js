@@ -61,10 +61,10 @@ function router(req, res){
 } 
 
 function createFile(dqvString){
-    console.log("file write");
+    
     var dqvJSON = JSON.parse(dqvString);
-    console.log(dqvJSON.firingPoints[0].shots[0].timestamp);
     var outputFile = dqvJSON.city + '_' + dqvJSON.date + '.txt';
+    console.log(outputFile + " written to disk");
 
     fs.appendFile(outputFile, dqvString, function(err){
         if (err) throw err;
