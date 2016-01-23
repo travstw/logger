@@ -1,0 +1,1 @@
+{"city":"East Palo Alto","date":"01232016","personnel":["Scott Weiser"," PJ Ramos"," Ron Cayabyab"],"comments":"","firingPoints":[{"name":"Parking Lot","latLong":"45.345445, -85.434343","shots":[{"weapon":"9mm","rounds":"3","timestamp":"11:32:26","flexID":"-9999"}]}]}

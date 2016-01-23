@@ -11,40 +11,46 @@
 			<fieldset>
 				<legend>DQV Information</legend>
 				City:<br>
-				<input type="text" name="city" id="city" value="Oakland"><br>
+				<input type="text" name="city" id="city" value="Oakland" style="width:400px"><br>
 				Date:<br>
-				<input type="text" name="date" id="date" value="01232016"><br>
+				<input type="text" name="date" id="date" value="01232016" style="width:400px"><br>
 				Personnel:<br>
-				<input type="text" name="personnel" id="personnel" value="Scott Weiser, PJ Ramos, Ron Cayabyab"><br>
+				<input type="text" name="personnel" id="personnel" value="Scott Weiser, PJ Ramos, Ron Cayabyab" style="width:400px"><br>
 				Comments:<br>
-				<input type="text" name="comments" id="comment_DQV" value = ""><br>
+				<input type="textbox" name="comments" id="comment_DQV" value = "" style="width:400px"><br>
 			</fieldset><br>
 
-			<fieldset>
-				<legend>Firing Point One</legend>
-				Name: <input type="text" name="Name" id="name_firingPoint" value="Parking Lot">
-				Lat/Long: <input type="text" name="Lat/Long" id="latLong_firingPoint" value="45.345445, -85.434343"><br>
-				Shots: <br><br>
+			Firing Points: <button type="button" id="addFiringPoint">Add</button>	<br><br>
+			<div id="fpContainer"></>
+			<!-- <div>
+				<fieldset>
+					<div id='fp'>
+						<legend>Firing Point</legend><br>
+						Name: <input type="text" name="Name" id="name_firingPoint" value="Parking Lot">
+						Latitude: <input type="text" name="Lat" id="lat_firingPoint" value="45.345445">
+						Longitude: <input type="text" name="Long" id="long_firingPoint" value="-75.345445"><br><br>
+					
+							Shots:  <button type="button" onclick="addShot()">Add</button>	<br><br>
+									<div id="shots"></div>
 
-				Weapon: <select id="fp1Shot1_Weapon">
-							<option value="9mm">9mm</option>
-							<option value=".40">.40</option>
-							<option value=".45">.45</option>
-						</select>
+						Weapon: <select id="fp1Shot1_Weapon">
+									<option value="9mm">9mm</option>
+									<option value=".40">.40</option>
+									<option value=".45">.45</option>
+								</select>
 
-				Rounds: <select id="fp1Shot1_Rounds">
-							<option value="3">3</option>
-							<option value="1">1</option>		
-						</select>
+						Rounds: <select id="fp1Shot1_Rounds">
+									<option value="3">3</option>
+									<option value="1">1</option>		
+								</select>
 
-				TimeStamp: <input type="text" name="TimeStamp" id="fp1Shot1_TimeStamp">
-				FlexID: <input type="text" name="FlexID" id="fp1Shot1_FlexID" value="-9999">
-				<button type="button" onclick="getTime()">Shot</button>
-				
-				
-			</fieldset>
-
-
+						TimeStamp: <input type="text" name="TimeStamp" id="fp1Shot1_TimeStamp">
+						FlexID: <input type="text" name="FlexID" id="fp1Shot1_FlexID" value="-9999">
+						<button type="button" onclick="getTime()">Shot</button>	
+					</div>
+				</fieldset>
+			</div>	 -->
+			</div>
 
 
 			
