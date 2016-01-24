@@ -43,7 +43,7 @@ function router(req, res){
   	
     } else if(reqObj.pathname === '/submit'){
 
-        var dqvString ='';  
+        var dqvString = '';  
 
         req.on('data', function (data) {
           dqvString += data;
@@ -51,6 +51,7 @@ function router(req, res){
         
         req.on('end', function(){        
           res.end();
+
           createFile(dqvString);
 
           

@@ -11,6 +11,7 @@
 		this.comments;
 		this.firingPoints = [];
 		this.weapons = [];
+		this.session;
 		
 		var self = this;
 
@@ -22,7 +23,22 @@
 		}
 
 		this.saveSession = function(){
+			
+			for (var i = 0; i < self.firingPoints.length; i++){
+				self.firingPoints[i].save();
+				self.session.firingPoints.push(self.firingPoints[i].JSON);
+				for (var j = 0; j < self.firingPoints[i].shots.length; j++){
+					self.session.firingPoints[i].shots.push(self.firingPoints[i].shots[j].JSON);
+				}	
+			}
 
+			var http = new XMLHttpRequest();
+  			var url = "/submit";
+  			var params = JSON.stringify(self.session);
+  			http.open("POST", url, true);
+  			http.setRequestHeader("Content-type", "application/json");
+  			http.send(params);
+			
 		}
 
 		this.saveInfo = function(){
@@ -31,6 +47,15 @@
 			self.personnel = document.getElementById('personnel').value;
 			self.comments = document.getElementById('comment_DQV').value;
 
+			self.session = {
+				"city": self.city, 
+				"date": self.date, 
+				"personnel": self.personnel.split(','), 
+				"comments" : self.comments,
+				"firingPoints": []
+
+			}
+						
 			var nineMM = document.getElementById('9mm');
 			var forty = document.getElementById('.40');
 			var forty5 = document.getElementById('.45');
@@ -91,8 +116,12 @@
 
 
 	function FiringPoint(fpID, weapons){
-		
+		this.fp_Name;
+		this.latitude;
+		this.longitude;
+		this.comments;			
 		this.shots = [];
+		this.JSON;
 
 		var self = this;
 
@@ -100,6 +129,22 @@
 
 			view.addShotToDom(self.shots.length + 1, fpID);
 			self.shots.push(new Shot(self.shots.length + 1, fpID, weapons));		
+		}
+
+		this.save = function(){
+			self.fp_name = document.getElementById('name_firingPoint'+ fpID).value;
+			self.latitude = document.getElementById('lat_firingPoint' + fpID).value;
+			self.longitude = document.getElementById('long_firingPoint'+ fpID).value;
+			self.comments = document.getElementById('FP_comments' + fpID).value;
+
+			self.JSON = {
+				"name": self.fp_name,
+				"latitude": self.latitude, 
+				"longitude": self.longitude, 
+				"comments": self.comments, 
+				"shots": []
+			}
+
 		}
 
 		this.addShotButtonEvent = function(){
@@ -119,6 +164,7 @@
 		this.timestamp;
 		this.flexID;
 		this.comments;
+		this.JSON;
 		var self = this;
 
 		this.getTime = function(){
@@ -162,6 +208,14 @@
 			self.flexID = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_flexID').value;
 			self.comments = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_comments').value;
 
+			self.JSON = {
+				"weapon": self.weapon, 
+				"rounds": self.rounds, 
+				"timestamp": self.timestamp, 
+				"flexID": self.flexID, 
+				"comments": self.comments
+			}
+
 			console.log(self.weapon);
 			console.log(self.rounds);
 			console.log(self.timestamp);
@@ -170,7 +224,8 @@
 
 			self.removeSaveEventListener();
 			self.addEditEventListener();
-			view.disableShotsEditing(shotID, fpID);		
+			view.disableShotsEditing(shotID, fpID);	
+			view.moveShotToList(shotID, fpID);	
 			
 		}
 
@@ -206,6 +261,12 @@
 
 
 
+	function buildJSON(){
+
+	}
+
+
+
 	view = {
 
 		addFiringPointToDom: function(fpID){
@@ -220,10 +281,12 @@
 			'<legend>Firing Point ' + fpID + '</legend><br>'+
 			'  Name: <input type="text" name="Name" id="name_firingPoint'+ fpID +'" value="Parking Lot">'+
 			'  Latitude: <input type="text" name="Lat" id="lat_firingPoint' + fpID + '" value="45.345445">'+
-			'  Longitude: <input type="text" name="Long" id="long_firingPoint'+ fpID + '" value="-75.345445"><br><br>'+
+			'  Longitude: <input type="text" name="Long" id="long_firingPoint'+ fpID + '" value="-75.345445">'+
+			'  Comments:  <input type="text" name="FP_Comments" id="FP_comments' + fpID + '"value=""><br><br>' +
 			'Shots:  <button type="button" id="addShot' + fpID + '">Add</button>	<br><br>'+
-			'<div id="shots' + fpID + '"></div>'+
+			'<div id="shots' + fpID + '"><div style="height:40px"</div>List:<br><br></div>'+
 			'</div>'+
+			'<div id="shotList' + fpID + '"></div>' +
 			'</fieldset>'+
 			'</div>'	
 		},
@@ -234,13 +297,10 @@
 
 			var FP = document.querySelector("#shots" + fpID);
 			var shotDiv = document.createElement('DIV');
-			shotDiv.id = "Shot" + shotID
+			shotDiv.id = 'shot' + shotID + 'fp_' + fpID;
 			var first = FP.firstChild;
 			FP.insertBefore(shotDiv, first);
 			shotDiv.innerHTML = 'Shot ' + shotNumber + ': Weapon: <select id="fp_' + fpID + '_shot_' + shotID +'_weapon">' +
-			// '<option value="9mm">9mm</option>' +
-			// '<option value=".40">.40</option>' +
-			// '<option value=".45">.45</option>' +
 			'</select>    ' +
 			'Rounds: <select id="fp_' + fpID + '_shot_'+ shotID +'_rounds">' +
 			'<option value="3">3</option>' +
@@ -306,6 +366,14 @@
 			document.getElementById('otherWeapon').disabled = false;
 			document.getElementById('comment_DQV').readOnly = false;
 			document.getElementById('saveInfo').innerHTML = "Save DQV Info";
+
+		},
+
+		moveShotToList: function(shotID, fpID){
+			var shotList = document.getElementById('shotList' + fpID);
+			var shot = document.getElementById('shot' + shotID + 'fp_' + fpID);
+
+			shotList.appendChild(shot);
 
 		}
 
