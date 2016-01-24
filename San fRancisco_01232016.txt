@@ -1,1 +1,0 @@
-{"city":"San fRancisco","date":"01232016","personnel":["Scott Weiser"," PJ Ramos"," Ron Cayabyab"],"comments":"","firingPoints":[{"name":"Parking Lot","latitude":"45.345445","longitude":"-75.345445","comments":"","shots":[null,null]},{"name":"Parking Lot","latitude":"23.45455","longitude":"-32.345445","comments":"hello","shots":[null,null]}]}
