@@ -3,7 +3,10 @@
 <html>
 	<head>
 		<Title>SST DQV Logger</Title>
-		
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  		<!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
 
 	</head>
 	<body>
@@ -13,7 +16,7 @@
 				City:
 				<input type="text" name="city" id="city" value="Oakland" style="width:400px"><br><br>
 				Date:
-				<input type="text" name="date" id="date" value="01232016" style="width:400px"><br><br>
+				<input type="text" name="date" id="datepicker" value="" style="width:400px"><br><br>
 				Personnel:
 				<input type="text" name="personnel" id="personnel" value="Scott Weiser, PJ Ramos, Ron Cayabyab" style="width:400px"><br><br>
 				Weapons:
@@ -25,6 +28,8 @@
 
 				Comments:
 				<input type="textbox" name="comments" id="comment_DQV" value = "" style="width:400px"><br><br>
+				Weather:
+				<input type="textbox" name="weather" id="weather" value = "" style="width:400px"><br><br>
 				<button type="button" id="saveInfo">Save DQV Info</button>
 				<button type="button" id="saveSession">Save Session</button>
 			</fieldset><br>

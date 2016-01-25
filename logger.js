@@ -1,6 +1,13 @@
 
 (function(){
 
+	$(function() {
+    		$( "#datepicker" ).datepicker();
+
+  	});
+
+  			
+
 	var dqv = new DQV();
 
 	function DQV(){
@@ -11,6 +18,7 @@
 		this.date;
 		this.personnel;	
 		this.comments;
+		this.weather;
 		this.firingPoints = [];
 		this.weapons = [];
 		this.session;
@@ -50,15 +58,18 @@
 			//Saves DQV info, sets weapon options, re-enables add firing point button
 
 			self.city = document.getElementById('city').value;
-			self.date = document.getElementById('date').value;
+			self.date = document.getElementById('datepicker').value;
+			self.date = $.datepicker.formatDate("yy-mm-dd", new Date(self.date));
 			self.personnel = document.getElementById('personnel').value;
 			self.comments = document.getElementById('comment_DQV').value;
+			self.weather = document.getElementById('weather').value
 
 			self.session = {
 				"city": self.city, 
 				"date": self.date, 
 				"personnel": self.personnel.split(','), 
 				"comments" : self.comments,
+				"weather": self.weather,
 				"firingPoints": []
 
 			}
@@ -455,7 +466,7 @@
 			//Disables DQV Info Editing	
 
 			document.getElementById('city').readOnly = true;
-			document.getElementById('date').readOnly = true;
+			document.getElementById('datepicker').readOnly = true;
 			document.getElementById('personnel').readOnly = true;
 			document.getElementById('9mm').disabled = true;
 			document.getElementById('.40').disabled = true;
@@ -471,7 +482,7 @@
 			//Enables DQV Info Editing
 
 			document.getElementById('city').readOnly = false;
-			document.getElementById('date').readOnly = false;
+			document.getElementById('datepicker').readOnly = false;
 			document.getElementById('personnel').readOnly = false;
 			document.getElementById('9mm').disabled = false;
 			document.getElementById('.40').disabled = false;
