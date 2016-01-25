@@ -296,11 +296,8 @@
 			self.timestamp = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_timeStamp').value;
 			var ID = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_flexID');
 			if (ID.value === ''){
-				console.log('hi');
 				ID.value = '-9999';
-				console.log(ID);
-				self.flexID = ID.value;
-				console.log(self.flexID);				
+				self.flexID = ID.value;				
 			} else {
 				self.flexID = ID.value;
 			}
