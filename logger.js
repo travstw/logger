@@ -370,9 +370,6 @@
 	}
 
 
-
-
-
 	view = {
 
 		//Methods for changing view states 

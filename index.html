@@ -8,13 +8,17 @@
   		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   		<!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
 
+
 	</head>
 	<body>
+		<div id="map"></div>
 		<form>
 			<fieldset>
 				<legend>DQV Information</legend>
 				City:
 				<input type="text" name="city" id="city" value="Oakland" style="width:400px"><br><br>
+
+
 				Date:
 				<input type="text" name="date" id="datepicker" value="" style="width:400px"><br><br>
 				Personnel:
@@ -32,7 +36,9 @@
 				<input type="textbox" name="weather" id="weather" value = "" style="width:400px"><br><br>
 				<button type="button" id="saveInfo">Save DQV Info</button>
 				<button type="button" id="saveSession">Save Session</button>
-			</fieldset><br>
+				
+			</fieldset>
+			<br>
 
 			Firing Points: <button type="button" id="addFiringPoint">Add</button>	<br><br>
 			<div id="fpContainer">
@@ -40,5 +46,6 @@
 			</div>			
 		<form><br>					
 		<script src="logger.js" ></script>
+		
 	</body>
 </html>
