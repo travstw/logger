@@ -3,49 +3,135 @@
 <html>
 	<head>
 		<Title>SST DQV Logger</Title>
+		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
   		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
   		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  		<!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+		<link rel="stylesheet" type="text/css" href="logger.css">
 
+  		<meta name="viewport" content="initial-scale=1.0">
+	    <meta charset="utf-8">
+	   
+	    <script>
+			var map;
+			var circle;
+			var marker;
+			function initMap() {
+			    map = new google.maps.Map(document.getElementById('map'), {
+			    center: {lat: 37.539028, lng: -122.064272},
+			    zoom: 18,
+			    mapTypeId:google.maps.MapTypeId.HYBRID
+			    });
+			    map.setTilt(0);
+			    circle = new google.maps.Circle({
+						center: map.center,
+						radius:25,
+						strokeColor:"#fff13a",
+						strokeOpacity:0.9,
+						strokeWeight:1,
+			  			fillColor:"#fff13a",
+			  			fillOpacity:0.1,
+			  			
+			  			
+						});
+			    marker = new google.maps.Marker({
+  					position: map.center,
 
-	</head>
+  				});
+			}
+
+			
+		</script>    
+  	</head>
+
+	
 	<body>
-		<div id="map"></div>
-		<form>
-			<fieldset>
-				<legend>DQV Information</legend>
-				City:
-				<input type="text" name="city" id="city" value="Oakland" style="width:400px"><br><br>
+
+	<div class="page-container">
+  
+	<!-- top navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+       <div class="container">
+    	<div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="navbar-brand" href="#">SST LFT Logger</a>
+    	</div>
+       </div>
+    </div>
+      
+    <div class="container">
+      <div id="map"></div><br>
+      <div class="row row-offcanvas row-offcanvas-left">
+        
+        <!-- sidebar -->
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+            <ul id="nav" class="nav">
+              <li class="active"><a href="#">DQV INFO</a></li>
+              <li><button class="pure-button" type="button" id="addFiringPoint"><i class="fa fa-plus-circle"></i> Add Firing Point</button></li>
+              
+                       
+            </ul>
+        </div>
+  	
+        <!-- main area -->
+        <div class="col-xs-12 col-sm-9">
+        	<form>
+		  		<fieldset class="fieldSet">
+		  			<legend> DQV Information </legend>
+		  			City:
+		  			<input class="inputs" type="text" name="city" id="city" value="Oakland" style="width:401px"><br>
 
 
-				Date:
-				<input type="text" name="date" id="datepicker" value="" style="width:400px"><br><br>
-				Personnel:
-				<input type="text" name="personnel" id="personnel" value="Scott Weiser, PJ Ramos, Ron Cayabyab" style="width:400px"><br><br>
-				Weapons:
-				<input type="checkbox" name="9mm" id="9mm" value="9mm" checked>9mm  
-				<input type="checkbox" name=".40" id=".40" value=".40" checked>.40
-				<input type="checkbox" name=".45" id=".45" value=".45">.45
-				<!-- <input type="checkbox" name=".38" id=".38" value=".38">.38 -->
-				<input type="checkbox" name="other" id="other" value="">Other  <input type="textbox" name="other" id="otherWeapon"><br><br>  
+		  			Date:
+		  			<input class="inputs" type="text" name="date" id="datepicker" value="" style="width:397px"><br>
+		  			Personnel:
+		  			<input class="inputs" type="text" name="personnel" id="personnel" value="Scott Weiser, PJ Ramos, Ron Cayabyab" style="width:368px"><br>
+		  			Weapons:
+		  			<input class="inputs" type="checkbox" name="9mm" id="9mm" value="9mm" checked> 9mm  
+		  			<input class="inputs" type="checkbox" name=".40" id=".40" value=".40" checked> .40
+		  			<input class="inputs" type="checkbox" name=".45" id=".45" value=".45"> .45
+		  			<!-- <input type="checkbox" name=".38" id=".38" value=".38">.38 -->
+		  			<input class="inputs" type="checkbox" name="other" id="other" value=""> Other  <input class="inputs" type="textbox" name="other" id="otherWeapon" style="width:206px"><br>  
 
-				Comments:
-				<input type="textbox" name="comments" id="comment_DQV" value = "" style="width:400px"><br><br>
-				Weather:
-				<input type="textbox" name="weather" id="weather" value = "" style="width:400px"><br><br>
-				<button type="button" id="saveInfo">Save DQV Info</button>
-				<button type="button" id="saveSession">Save Session</button>
-				
-			</fieldset>
-			<br>
+		  			Comments:
+		  			<input class="inputs" type="textbox" name="comments" id="comment_DQV" value = "" style="width:363px"><br><br>
+		  			<!-- Weather: -->
+		  			<!-- <input class="inputs" type="textbox" name="weather" id="weather" value = "" style="width:400px"><br><br> -->
+		  			<button class="pure-button button" type="button" id="saveInfo"><i class="fa fa-floppy-o"></i> Save DQV Info </button>
+		  			<button class="pure-button button" type="button" id="saveSession"><i class="fa fa-floppy-o"></i> Export Session </button>
 
-			Firing Points: <button type="button" id="addFiringPoint">Add</button>	<br><br>
-			<div id="fpContainer">
-				
-			</div>			
-		<form><br>					
-		<script src="logger.js" ></script>
+		  		</fieldset><br>
+  			<form><br>	
+
+	  	<div id="fpContainer"></div>			
+
+
+
+	  	<script src="logger.js" ></script>
+	  	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTq18m2TZbRuu6cgWeQS3kcNsHl9-9P1U&callback=initMap" aync defer></script>
+          
+          
+          
+        </div><!-- /.col-xs-12 main -->
+    </div><!--/.row-->
+  </div><!--/.container-->
+</div><!--/.page-container-->
+
+
+
+  
+	
+  	
+
+  	
+  		
 		
 	</body>
 </html>

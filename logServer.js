@@ -40,6 +40,19 @@ function router(req, res){
     		jsFile.on('end', function(){
     			res.end();
     		});
+
+    } else if(reqObj.pathname === '/logger.css'){      
+        res.writeHead(200, {'Content-Type': 'text/css'});
+        var jsFile = fs.createReadStream('./logger.css');
+        
+        jsFile.on('readable', function(){
+          this.pipe(res);
+        });
+
+        jsFile.on('end', function(){
+          res.end();
+        });
+    
   	
     } else if(reqObj.pathname === '/submit'){
 
