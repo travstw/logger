@@ -41,9 +41,13 @@
 				marker.setMap(map);
 		},
 
-		addShotMarker: function(lat, lng){
+		addShotMarker: function(lat, lng, flexID){
+				console.log(flexID);
 				var marker = new google.maps.Marker({
-  					position: {lat: lat, lng: lng}
+  					position: {lat: lat, lng: lng}, 
+  					title: flexID,
+  					animation: google.maps.Animation.DROP
+
   				});
 
 				marker.setMap(map);
@@ -250,12 +254,15 @@
 			
 			var lat = parseFloat(document.getElementById('lat_firingPoint' + fpID).value);
 			var lng = parseFloat(document.getElementById('long_firingPoint' + fpID).value);
+			console.log(lat + ',' + lng);
 
-			mapControl.centerFiringPoint(lat, lng);
-
+			if(isNaN(lat) || isNaN(lng)){
+				alert("Please add GPS coordinates");
+				
+			} else {
+				mapControl.centerFiringPoint(lat, lng);
+			}
 		}
-
-
 
 		this.addShotButtonEvent = function(){
 			//adds listener for add shot button
@@ -391,13 +398,6 @@
 				"comments": self.comments
 			};
 
-			// console.log(self.weapon);
-			// console.log(self.rounds);
-			// console.log(self.timestamp);
-			// console.log(self.flexID);
-			// console.log(self.comments);
-
-
 			document.getElementById('addShot' + fpID).disabled = false;
 			self.removeSaveEventListener();
 			self.addEditEventListener();
@@ -477,7 +477,7 @@
 												'  Longitude: <input class="inputs" type="text" name="Long" id="long_firingPoint'+ fpID + '" value="-68.766010" style="width:75px">'+
 												' <button class="pure-button button" type="button" id="focusMap' + fpID + '"><i class="fa fa-map-marker"></i> Focus Map </button>' +
 												'  Comments:  <input class="inputs" type="text" name="FP_Comments" id="FP_comments' + fpID + '"value=""><br><br>' +
-												'Shots:  <button class="pure-button button" type="button" id="addShot' + fpID + '"><i class="fa fa-plus-circle"></i> Add</button>	<br><br>'+
+												'Shots:  <button class="pure-button button" type="button" id="addShot' + fpID + '"><i class="fa fa-plus-circle"></i> Add</button><br>'+
 													 '<div id="spacer" style="height:20px"> ' +
 													'<div id="shots' + fpID + '"></div> ' +
 													 '</div> ' +
@@ -626,8 +626,8 @@
 		},
 
 		plotShot: function(coordinates){
-			shotSimulation.getGPS()
-			mapControl.addShotMarker(coordinates[1], coordinates[2])
+			shotSimulation.getGPS();
+			mapControl.addShotMarker(coordinates[1], coordinates[2], coordinates[0].toString());
 		}
 
 
