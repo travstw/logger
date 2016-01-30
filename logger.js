@@ -42,7 +42,7 @@
 		},
 
 		addShotMarker: function(lat, lng, flexID){
-				console.log(flexID);
+				
 				var marker = new google.maps.Marker({
   					position: {lat: lat, lng: lng}, 
   					title: flexID,
@@ -72,6 +72,7 @@
 		// this.weather;
 		this.firingPoints = [];
 		this.weapons = [];
+		this.weaponsValues = [];
 		this.session;
 		
 		var self = this;
@@ -118,26 +119,45 @@
 
 			$('#datepicker').datepicker().datepicker('disable');
 
-			self.session = {
-				"city": self.city, 
-				"date": self.date, 
-				"personnel": self.personnel.split(','), 
-				"weapons": self.weapons,
-				"comments" : self.comments,
-				// "weather": self.weather,
-				"firingPoints": []
-
-			};
-						
+			
 			var nineMM = document.getElementById('9mm');
 			var forty = document.getElementById('.40');
 			var forty5 = document.getElementById('.45');
 			var other = document.getElementById('other');
 			self.weapons = [];
-
-			self.weapons.push(nineMM, forty, forty5, other);
-			view.weaponList.push(nineMM, forty, forty5, other);
+			self.weaponsValues= [];
+			view.weaponList = [];
 			
+
+			
+			self.weapons.push(nineMM, forty, forty5, other);
+
+			for(var x = 0; x < self.weapons.length; x++){
+				if(self.weapons[x].checked){
+					if(self.weapons[x] === other){
+						var otherWeapon = document.getElementById('otherWeapon');
+						view.weaponList.push(otherWeapon.value);
+						self.weaponsValues.push(otherWeapon.value);
+					} else {
+						view.weaponList.push(self.weapons[x].value);
+						self.weaponsValues.push(self.weapons[x].value);
+					}	
+				}
+			}
+
+			self.session = {
+				"city": self.city, 
+				"date": self.date, 
+				"personnel": self.personnel.split(','), 
+				"weapons": self.weaponsValues,
+				"comments" : self.comments,
+				// "weather": self.weather,
+				"firingPoints": []
+
+			};
+
+			
+						
 			
 
 
@@ -257,7 +277,7 @@
 			
 			var lat = parseFloat(document.getElementById('lat_firingPoint' + fpID).value);
 			var lng = parseFloat(document.getElementById('long_firingPoint' + fpID).value);
-			console.log(lat + ',' + lng);
+			
 
 			if(isNaN(lat) || isNaN(lng)){
 				alert("Please add GPS coordinates");
@@ -461,15 +481,10 @@
 
 			for (var i = 0; i < view.weaponList.length; i++){
 				
-				if (view.weaponList[i].checked && self.weaponList.indexOf(view.weaponList[i].value) === -1){
-					self.weaponList.push(view.weaponList[i].value);
+				if (self.weaponList.indexOf(view.weaponList[i]) === -1){
+					self.weaponList.push(view.weaponList[i]);
 					var w = document.createElement('option');
-					if(view.weaponList[i] === other){
-						w.text = document.getElementById('otherWeapon').value;
-					} else {
-						w.text = view.weaponList[i].value;
-					};
-
+					w.text = view.weaponList[i];					
 					x.add(w);
 				};
 			};			 			
@@ -546,11 +561,12 @@
 			'<option value="1">1</option>' +		
 			'</select>    ' +
 			'TimeStamp: <input class="inputs" type="text" name="TimeStamp" id="fp_' + fpID + '_shot_'+ shotID +'_timeStamp" value="" style="width:60px">    ' +
-			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_getTime"><i class="fa fa-dot-circle-o"></i> Shot </button>  ' +
+			
 			'FlexID: <input class="inputs" type="text" name="FlexID" id="fp_' + fpID + '_shot_'+ shotID +'_flexID" value="" style="width:60px">   ' +
 			'<input class="inputs" type="text" name="lat" id="fp_' + fpID + '_shot_' + shotID + '_lat" value="" style="width:75px; display:none"> ' +
 			'<input class="inputs" type="text" name="long" id="fp_' + fpID + '_shot_' + shotID + '_lng" value="" style="width:75px; display:none"> ' +
 			'Comments: <input class="inputs" type="text" name="Comments" id="fp_' + fpID + '_shot_'+ shotID +'_comments" value="">   ' +
+			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_getTime"><i class="fa fa-dot-circle-o"></i> Shot </button>  ' +
 			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_save" style="display: none"><i class="fa fa-floppy-o"></i> Save </button><br><br> ' 
 		},
 
@@ -622,7 +638,7 @@
 		moveShotToList: function(shotID, fpID){
 			//Moves shot Div to shot list Div
 
-			console.log("hello");
+			
 
 			var shotList = document.getElementById('shotList' + fpID);
 			var shot = document.getElementById('shot' + shotID + 'fp_' + fpID);
