@@ -18,7 +18,15 @@ body {
   width: 12%;
 
 }
-#sidebar .nav {
+
+#fpList {
+  height: 100%;
+  padding-right: 0;
+  padding-top: 20px;
+  width: 12%;
+
+}
+#sidebar .nav{
   width: 100%;
 
 }
@@ -108,3 +116,15 @@ body {
 #spacer {
     margin: 5px 0px 5px 0px;
 }
+
+.tab {
+  display: none;
+}
+
+.active-tab{
+  display: block;
+}
+
+/*.inactive {
+  display:none;
+}*/

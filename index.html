@@ -84,45 +84,50 @@
         
         <!-- sidebar -->
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-            <ul id="nav" class="nav">
-              <li class="active"><a href="#">DQV INFO</a></li>
-              <li><button class="pure-button" type="button" id="addFiringPoint"><i class="fa fa-plus-circle"></i> Add Firing Point</button></li>
-              
-                       
-            </ul>
+        	<div class="tabs">
+            	<ul id="nav" class="nav tab-links">
+              		<li class="active"><a href="#dqvinfo">DQV INFO</a></li>
+              		<button class="pure-button" type="button" id="addFiringPoint"><i class="fa fa-plus-circle"></i> Add Firing Point</button>
+            	</ul>
+            <!-- <ul id="fpList" class="nav"></ul> -->
+        	</div>
         </div>
   	
         <!-- main area -->
         <div class="col-xs-12 col-sm-9">
-        	<form>
-		  		<fieldset class="fieldSet">
-		  			<legend> DQV Information </legend>
-		  			City:
-		  			<input class="inputs" type="text" name="city" id="city" value="Oakland" style="width:401px"><br>
+        	<div id="tab-content" class="tab-content">
+	        	<div id="dqvinfo" class="tab active-tab">
+	        		<form>
+			  		<fieldset class="fieldSet">
+			  			<legend> DQV Information </legend>
+			  			City:
+			  			<input class="inputs" type="text" name="city" id="city" value="" style="width:401px"><br>
 
 
-		  			Date:
-		  			<input class="inputs" type="text" name="date" id="datepicker" value="" style="width:397px"><br>
-		  			Personnel:
-		  			<input class="inputs" type="text" name="personnel" id="personnel" value="Scott Weiser, PJ Ramos, Ron Cayabyab" style="width:368px"><br>
-		  			Weapons:
-		  			<input class="inputs" type="checkbox" name="9mm" id="9mm" value="9mm" checked> 9mm  
-		  			<input class="inputs" type="checkbox" name=".40" id=".40" value=".40" checked> .40
-		  			<input class="inputs" type="checkbox" name=".45" id=".45" value=".45"> .45
-		  			<!-- <input type="checkbox" name=".38" id=".38" value=".38">.38 -->
-		  			<input class="inputs" type="checkbox" name="other" id="other" value=""> Other  <input class="inputs" type="textbox" name="other" id="otherWeapon" style="width:206px"><br>  
+			  			Date:
+			  			<input class="inputs" type="text" name="date" id="datepicker" value="" style="width:397px"><br>
+			  			Personnel:
+			  			<input class="inputs" type="text" name="personnel" id="personnel" value="" style="width:368px"><br>
+			  			Weapons:
+			  			<input class="inputs" type="checkbox" name="9mm" id="9mm" value="9mm" checked> 9mm  
+			  			<input class="inputs" type="checkbox" name=".40" id=".40" value=".40" checked> .40
+			  			<input class="inputs" type="checkbox" name=".45" id=".45" value=".45"> .45
+			  			<!-- <input type="checkbox" name=".38" id=".38" value=".38">.38 -->
+			  			<input class="inputs" type="checkbox" name="other" id="other" value=""> Other  <input class="inputs" type="textbox" name="other" id="otherWeapon" style="width:206px"><br>  
 
-		  			Comments:
-		  			<input class="inputs" type="textbox" name="comments" id="comment_DQV" value = "" style="width:363px"><br><br>
-		  			<!-- Weather: -->
-		  			<!-- <input class="inputs" type="textbox" name="weather" id="weather" value = "" style="width:400px"><br><br> -->
-		  			<button class="pure-button button" type="button" id="saveInfo"><i class="fa fa-floppy-o"></i> Save DQV Info </button>
-		  			<button class="pure-button button" type="button" id="saveSession"><i class="fa fa-floppy-o"></i> Export Session </button>
+			  			Comments:
+			  			<input class="inputs" type="textbox" name="comments" id="comment_DQV" value = "" style="width:363px"><br><br>
+			  			<!-- Weather: -->
+			  			<!-- <input class="inputs" type="textbox" name="weather" id="weather" value = "" style="width:400px"><br><br> -->
+			  			<button class="pure-button button" type="button" id="saveInfo"><i class="fa fa-floppy-o"></i> Save DQV Info </button>
+			  			<button class="pure-button button" type="button" id="saveSession"><i class="fa fa-floppy-o"></i> Export Session </button>
 
-		  		</fieldset><br>
-  			<form><br>	
-
-	  	<div id="fpContainer"></div>			
+			  		</fieldset><br>
+	  				<form>
+	  			</div>
+	  			<!-- <div id="fpContainer"></div>		 -->
+	  		</div>
+	  			
 
 
 

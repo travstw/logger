@@ -6,11 +6,7 @@
 
   	});
 
-  	$(document).ready(function() {
-  		$('[data-toggle=offcanvas]').click(function() {
-    	$('.row-offcanvas').toggleClass('active');
-  		});
-	});
+
 
 	
 
@@ -52,8 +48,30 @@
 
 				marker.setMap(map);
 
+		},
+
+		centerFiringPointFromMenu: function(fpID){
+			var lat = parseFloat(document.getElementById('lat_firingPoint' + fpID).value);
+			var lng = parseFloat(document.getElementById('long_firingPoint' + fpID).value);
+			
+
+			if(isNaN(self.lat) || isNaN(self.lng)){
+				mapControl.centerFiringPoint(lat, lng);
+				
+			} 
+				
+			
 		}
 	};
+
+
+
+
+  	
+
+   	
+	  	
+	
 
 
 
@@ -165,6 +183,7 @@
 			self.addEditInfoButtonEvent();
 			var button = document.getElementById('addFiringPoint').disabled = false;
 			view.disableDQVInfoEditing();
+
 		};
 
 		this.editInfo = function(){
@@ -176,6 +195,9 @@
 			view.enableDQVInfoEditing();
 
 		};
+
+
+		//Event handlers---------------------------------------------------------
 
 		this.addFiringPointButtonEvent = function(){
 			//adds listener for add Firing Point button
@@ -221,6 +243,8 @@
 			saveButton.removeEventListener('click', this.editInfo, false);
 		};
 
+		//------------------------------------------------------------------------
+
 		//Enables initial event listener states upon DQV object instantiation
 
 		this.addFiringPointButtonEvent();
@@ -236,8 +260,8 @@
 		//Firing Point Class
 
 		this.fp_Name;
-		this.latitude;
-		this.longitude;
+		this.lat;
+		this.lng;
 		this.comments;			
 		this.shots = [];
 		this.JSON;
@@ -257,15 +281,15 @@
 			//Saves Dom input values to field variables, formats JSON object
 
 			self.fp_name = document.getElementById('name_firingPoint'+ fpID).value;
-			self.latitude = document.getElementById('lat_firingPoint' + fpID).value;
-			self.longitude = document.getElementById('long_firingPoint'+ fpID).value;
+			self.lat = document.getElementById('lat_firingPoint' + fpID).value;
+			self.lng = document.getElementById('long_firingPoint'+ fpID).value;
 			self.comments = document.getElementById('FP_comments' + fpID).value;
 
 			self.JSON = {
 				"firingPoint": fpID,
 				"name": self.fp_name,
-				"latitude": self.latitude, 
-				"longitude": self.longitude, 
+				"latitude": self.lat, 
+				"longitude": self.lng, 
 				"comments": self.comments, 
 				"shots": []
 			};
@@ -275,17 +299,19 @@
 
 		this.focusMap = function(){
 			
-			var lat = parseFloat(document.getElementById('lat_firingPoint' + fpID).value);
-			var lng = parseFloat(document.getElementById('long_firingPoint' + fpID).value);
+			self.lat = parseFloat(document.getElementById('lat_firingPoint' + fpID).value);
+			self.lng = parseFloat(document.getElementById('long_firingPoint' + fpID).value);
 			
 
-			if(isNaN(lat) || isNaN(lng)){
+			if(isNaN(self.lat) || isNaN(self.lng)){
 				alert("Please add GPS coordinates");
 				
 			} else {
-				mapControl.centerFiringPoint(lat, lng);
+				mapControl.centerFiringPoint(self.lat, self.lng);
 			}
 		}
+
+		//Event handlers ---------------------------------------------------------
 
 		this.addShotButtonEvent = function(){
 			//adds listener for add shot button
@@ -298,6 +324,8 @@
 			var button = document.getElementById('focusMap' + fpID);
 			button.addEventListener('click', this.focusMap, false);
 		};
+
+		//------------------------------------------------------------------------
 
 		//sets inital listener state upon Firing Point object instantiation
 		this.addShotButtonEvent();
@@ -336,6 +364,8 @@
 			self.save();
 
 		};
+
+		//Event handlers -----------------------------------------------------------------------------
 
 		this.addTimestampEventListener = function(){
 			//adds listener for timestamp button
@@ -397,8 +427,9 @@
 			view.disableAddShotButton(fpID);
 			self.removeDisableNewShotEventListener();
 
-
 		};
+
+		//-----------------------------------------------------------------------------------------------
 
 		this.save = function(){
 			//saves Dom input info to field variables, formats JSON, handles event listener states
@@ -407,7 +438,9 @@
 			self.rounds = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_rounds').value;
 			self.timestamp = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_timeStamp').value;
 
-			// Simulation === gets gps coordinates 
+			
+
+		// Simulation === gets gps coordinates --------------------------------------
 			//TODO:  Db query to check for related incidents
 			
 			if(self.inList === false){
@@ -415,13 +448,14 @@
 				shotSimulation.alert(shotID, fpID);
 				self.lat = self.coordinates[1];
 				self.lng = self.coordinates[2];
-			}
+			}			
 
-
+			//-----------------------------------------------------------------------
+			
 			
 
-			//---------------------------------------------------
-			
+
+
 			var ID = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_flexID');
 			if (ID.value === ''){
 				ID.value = '-9999';
@@ -509,12 +543,15 @@
 
 			var ul = document.getElementById('nav');
 			var li = document.createElement('li');
-			li.innerHTML = '<a href="#">Firing Point ' + fpID + '</a>';
+			li.innerHTML = '<a href="#fp' + fpID + '">Firing Point ' + fpID + '</a>';
 			ul.appendChild(li);
+			setClicks();
 
-			var FPC = document.querySelector("#fpContainer");
+			var FPC = document.querySelector("#tab-content");
 			var fpDiv = document.createElement('DIV');
 			fpDiv.id = 'fp' + fpID;
+			fpDiv.classList.add('tab');
+			// fpDiv.classList.add('active-tab');
 			FPC.appendChild(fpDiv);
 			fpDiv.innerHTML =  	'<div>'+
 									'<fieldset class="fieldSet">'+
@@ -679,7 +716,7 @@
 
 
 
-	//Simulation of matching incidents from database
+	//Simulation of matching incidents from database---------------------------------------------------
 	shotSimulation = {
 
 		gps: [[3000, 44.776158, -68.765924], [3001, 44.776088, -68.766101], [3002, 44.776061, -68.766019], [3003, 44.776046, -68.766071], [3004, 44.775873, -68.766139]],
@@ -710,5 +747,23 @@
 
 
 	};
+
+	function setClicks(){
+   		$('.tabs .tab-links a').on('click', function(e)  {
+        	var currentAttrValue = jQuery(this).attr('href');
+	      
+		        // Show/Hide Tabs
+	    	$(currentAttrValue).addClass('active-tab').siblings().removeClass('active-tab');
+        	mapControl.centerFiringPointFromMenu(currentAttrValue.split('p')[1]);
+		 
+		        // //Change/remove current tab to active
+		        // jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+        	e.preventDefault();
+	    });
+   	}
+
+   	setClicks();
+
+
 
 })();
