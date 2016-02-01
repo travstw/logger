@@ -51,16 +51,17 @@
 		},
 
 		centerFiringPointFromMenu: function(fpID){
-
-			if(!fpID === null){
+				
 				var lat = parseFloat(document.getElementById('lat_firingPoint' + fpID).value);
 				var lng = parseFloat(document.getElementById('long_firingPoint' + fpID).value);
-			}
 
-			if(!isNaN(lat) || !isNaN(lng)){
+				if(!isNaN(lat) || !isNaN(lng)){
 				mapControl.centerFiringPoint(lat, lng);
 				
-			} 
+				}; 
+			
+
+			
 				
 			
 		}
@@ -781,7 +782,11 @@
 	      
 		        // Show/Hide Tabs
 	    	$(currentAttrValue).addClass('active-tab').siblings().removeClass('active-tab');
-        	mapControl.centerFiringPointFromMenu(currentAttrValue.split('p')[1]);
+
+	    	if(currentAttrValue !== "#dqvinfo"){
+	    		mapControl.centerFiringPointFromMenu(currentAttrValue.split('p')[1]);
+	    	}
+        	
 		 
 		        // //Change/remove current tab to active
 		        // jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
