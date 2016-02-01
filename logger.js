@@ -51,17 +51,21 @@
 		},
 
 		centerFiringPointFromMenu: function(fpID){
-			var lat = parseFloat(document.getElementById('lat_firingPoint' + fpID).value);
-			var lng = parseFloat(document.getElementById('long_firingPoint' + fpID).value);
-			
 
-			if(isNaN(self.lat) || isNaN(self.lng)){
+			if(!fpID === null){
+				var lat = parseFloat(document.getElementById('lat_firingPoint' + fpID).value);
+				var lng = parseFloat(document.getElementById('long_firingPoint' + fpID).value);
+			}
+
+			if(!isNaN(lat) || !isNaN(lng)){
 				mapControl.centerFiringPoint(lat, lng);
 				
 			} 
 				
 			
 		}
+
+		
 	};
 
 
@@ -92,14 +96,18 @@
 		this.weapons = [];
 		this.weaponsValues = [];
 		this.session;
+		this.started = false;
+		this.fpID;
 		
 		var self = this;
 
 		this.addFiringPoint = function(){
 			//Instantiates new Firing Point Object, Adds FP object to firingPoints array, adds Firing point HTML to DOM
-			
-			view.addFiringPointToDom(self.firingPoints.length + 1);
-			self.firingPoints.push(new FiringPoint(self.firingPoints.length + 1 , self.weapons));
+			self.fpID = self.firingPoints.length + 1;
+			view.addFiringPointToDom(self.fpID);
+			self.firingPoints.push(new FiringPoint(self.fpID , self.weapons));
+			view.newFiringPointFocus(self.fpID);
+			// view.toggleMenuActiveState(self.fpID);
 			
 			
 		};
@@ -175,7 +183,11 @@
 			};
 
 			
-						
+			if(self.started === false){
+				self.addFiringPoint();
+				// mapControl.newFiringPointFocus(self.fpID);
+				self.started = true;
+			}			
 			
 
 
@@ -445,7 +457,7 @@
 			
 			if(self.inList === false){
 				self.coordinates = shotSimulation.getGPS();
-				shotSimulation.alert(shotID, fpID);
+				shotSimulation.alert(shotID, fpID, self.coordinates);
 				self.lat = self.coordinates[1];
 				self.lng = self.coordinates[2];
 			}			
@@ -543,6 +555,7 @@
 
 			var ul = document.getElementById('nav');
 			var li = document.createElement('li');
+			li.classList.add('menu');
 			li.innerHTML = '<a href="#fp' + fpID + '">Firing Point ' + fpID + '</a>';
 			ul.appendChild(li);
 			setClicks();
@@ -557,16 +570,17 @@
 									'<fieldset class="fieldSet">'+
 										'<legend> Firing Point ' + fpID + ' </legend>'+
 											'<div id="fp">'+		
-												'  Name: <input class="inputs" type="text" name="Name" id="name_firingPoint'+ fpID +'" value="Parking Lot">'+
-												'  Latitude: <input class="inputs" type="text" name="Lat" id="lat_firingPoint' + fpID + '" value="44.776138" style="width:75px">'+
-												'  Longitude: <input class="inputs" type="text" name="Long" id="long_firingPoint'+ fpID + '" value="-68.766010" style="width:75px">'+
+												'  Name: <input class="inputs" type="text" name="Name" id="name_firingPoint'+ fpID +'" value="">'+
+												'  Latitude: <input class="inputs" type="text" name="Lat" id="lat_firingPoint' + fpID + '" value="" style="width:75px">'+
+												'  Longitude: <input class="inputs" type="text" name="Long" id="long_firingPoint'+ fpID + '" value="" style="width:75px">'+
 												' <button class="pure-button button" type="button" id="focusMap' + fpID + '"><i class="fa fa-map-marker"></i> Focus Map </button>' +
 												'  Comments:  <input class="inputs" type="text" name="FP_Comments" id="FP_comments' + fpID + '"value=""><br><br>' +
 												'Shots:  <button class="pure-button button" type="button" id="addShot' + fpID + '"><i class="fa fa-plus-circle"></i> Add</button><br>'+
 													 '<div id="spacer" style="height:20px"> ' +
 													'<div id="shots' + fpID + '"></div> ' +
 													 '</div> ' +
-												'<br>Firing Point ' + fpID + ' Shot List:<br> ' +
+												// 
+												'<br><br> '+
 											'</div>'+
 			
 										'<div class="shotList" id="shotList' + fpID + '"></div>' +
@@ -598,12 +612,12 @@
 			'<option value="1">1</option>' +		
 			'</select>    ' +
 			'TimeStamp: <input class="inputs" type="text" name="TimeStamp" id="fp_' + fpID + '_shot_'+ shotID +'_timeStamp" value="" style="width:60px">    ' +
+			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_getTime"><i class="fa fa-dot-circle-o"></i> Shot </button>  ' +
 			
-			'FlexID: <input class="inputs" type="text" name="FlexID" id="fp_' + fpID + '_shot_'+ shotID +'_flexID" value="" style="width:60px">   ' +
+			'<input class="inputs" type="text" name="FlexID" id="fp_' + fpID + '_shot_'+ shotID +'_flexID" value="" style="width:60px; display:none">   ' +
 			'<input class="inputs" type="text" name="lat" id="fp_' + fpID + '_shot_' + shotID + '_lat" value="" style="width:75px; display:none"> ' +
 			'<input class="inputs" type="text" name="long" id="fp_' + fpID + '_shot_' + shotID + '_lng" value="" style="width:75px; display:none"> ' +
 			'Comments: <input class="inputs" type="text" name="Comments" id="fp_' + fpID + '_shot_'+ shotID +'_comments" value="">   ' +
-			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_getTime"><i class="fa fa-dot-circle-o"></i> Shot </button>  ' +
 			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_save" style="display: none"><i class="fa fa-floppy-o"></i> Save </button><br><br> ' 
 		},
 
@@ -680,6 +694,8 @@
 			var shotList = document.getElementById('shotList' + fpID);
 			var shot = document.getElementById('shot' + shotID + 'fp_' + fpID);
 			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_save').style.display = "inline";
+			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_flexID').style.display = "inline";
+
 			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_getTime').style.display = "none";
 			var lat = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_lat');
 			lat.style.display = "inline";
@@ -704,6 +720,15 @@
 			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_lat').value = lat;
 			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_lng').value = lng;
 
+		},
+
+		// toggleMenuActiveState: function(fpID){
+		// 	$('#fp' + fpID).parent('li').addClass('activeMenu').siblings().removeClass('activeMenu');
+		// },
+
+		newFiringPointFocus: function(fpID){
+			$('#fp' + fpID).addClass('active-tab').siblings().removeClass('active-tab');
+			
 		}
 
 
@@ -726,8 +751,8 @@
 			return shotSimulation.gps[randomNumber];
 		},
 
-		alert: function(shotID, fpID){
-			var coordinates = shotSimulation.getGPS();
+		alert: function(shotID, fpID, coordinates){
+			
 			if(confirm('Flex ID ' + coordinates[0] + '?')){
 				var shot = document.getElementById('fp_' + fpID + '_shot_'+ shotID +'_flexID'); 
 				shot.value = coordinates[0];
@@ -747,6 +772,8 @@
 
 
 	};
+
+	
 
 	function setClicks(){
    		$('.tabs .tab-links a').on('click', function(e)  {

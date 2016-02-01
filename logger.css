@@ -110,6 +110,7 @@ body {
 }
 
 .shotList{
+  border-top: solid 2px #bfbfbf;
     
 }
 
@@ -123,6 +124,14 @@ body {
 
 .active-tab{
   display: block;
+}
+
+.menu {
+  background-color: white;
+}
+
+.activeMenu {
+  background-color: red;
 }
 
 /*.inactive {
