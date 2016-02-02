@@ -116,7 +116,16 @@
 			  			<input class="inputs" type="checkbox" name="other" id="other" value=""> Other  <input class="inputs" type="textbox" name="other" id="otherWeapon" style="width:206px"><br>  
 
 			  			Comments:
-			  			<input class="inputs" type="textbox" name="comments" id="comment_DQV" value = "" style="width:363px"><br><br>
+			  			<input class="inputs" type="textbox" name="comments" id="comment_DQV" value = "" style="width:363px"><br>
+			  			Detected:
+			  			<input class="inputs" type="textbox" name="detected" id="detected" value = "" style="width:30px" readOnly>
+			  			Missed:
+			  			<input class="inputs" type="textbox" name="missed" id="missed" value = "" style="width:30px" readOnly>
+			  			Mislocated:
+			  			<input class="inputs" type="textbox" name="mislocated" id="mislocated" value = "" style="width:30px" readOnly>
+			  			Detection Rate:
+			  			<input class="inputs" type="textbox" name="detectionrate" id="detection_rate" value = "" style="width:50px" readOnly><br><br>
+
 			  			<!-- Weather: -->
 			  			<!-- <input class="inputs" type="textbox" name="weather" id="weather" value = "" style="width:400px"><br><br> -->
 			  			<button class="pure-button button" type="button" id="saveInfo"><i class="fa fa-floppy-o"></i> Start DQV Session </button>
@@ -132,7 +141,7 @@
 
 
 	  	<script src="logger.js" ></script>
-	  	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTq18m2TZbRuu6cgWeQS3kcNsHl9-9P1U&callback=initMap" aync defer></script>
+	  	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTq18m2TZbRuu6cgWeQS3kcNsHl9-9P1U&callback=initMap" async defer></script>
           
           
           
