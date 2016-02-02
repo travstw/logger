@@ -478,7 +478,7 @@
 			//-----------------------------------------------------------------------
 			
 			var ID = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_flexID');
-			
+
 			if (ID.value === ''){
 
 				ID.value = '-9999';
@@ -627,7 +627,7 @@
 												'  Long: <input class="inputs" type="text" name="Long" id="long_firingPoint'+ fpID + '" value="-68.766063" style="width:75px">'+
 												' <button class="pure-button button" type="button" id="focusMap' + fpID + '"><i class="fa fa-map-marker"></i> Focus Map </button>' +
 												'  Comments:  <input class="inputs" type="text" name="FP_Comments" id="FP_comments' + fpID + '"value=""> ' +
-												' Detection Rate: <input class="inputs type="text" style="width:50px" name="det rate" id="detRate' + fpID + '""><br><br> ' +
+												' Detection Rate: <input class="inputs type="text" style="width:50px" name="det rate" id="detRate' + fpID + '"" readOnly><br><br> ' +
 												'Shots:  <button class="pure-button button" type="button" id="addShot' + fpID + '"><i class="fa fa-plus-circle"></i> Add</button><br>'+
 													 '<div id="spacer" style="height:20px"> ' +
 													'<div id="shots' + fpID + '"></div> ' +
