@@ -130,8 +130,14 @@ body {
   background-color: white;
 }
 
-.activeMenu {
+
+
+.getTime{
   background-color: red;
+  text-decoration: none;
+  border-radius: 5px;
+  height: 30px;
+  width: 75px;
 }
 
 /*.inactive {

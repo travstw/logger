@@ -6,8 +6,10 @@
   	});
 
 	mapControl = {
+		//controls methods for map
 
 		centerFiringPoint: function(lat, lng){
+			//centers map to existing to new coordinates
 			map.panTo({lat: lat, lng: lng});			
 			map.setZoom(19);
 			mapControl.centerCircle(lat, lng);
@@ -15,6 +17,7 @@
 		},
 
 		centerCircle: function(lat, lng){
+			//centers circle to coordinates
 
 			circle.setCenter({lat: lat, lng: lng});
 			circle.setVisible(true);
@@ -50,6 +53,7 @@
 
 		//DQV Session Class	
 
+		this.dqvname;
 		this.city;
 		this.date;
 		this.personnel;	
@@ -79,7 +83,7 @@
 
 		this.saveSession = function(){
 
-			//Collects data into JSON format, sends to server to be written to file
+			//Collects all data from session into JSON format, sends to server to be written to file---  TODO: Database
 			
 			for (var i = 0; i < self.firingPoints.length; i++){
 				self.firingPoints[i].save();
@@ -100,6 +104,7 @@
 		this.saveInfo = function(){
 			//Saves DQV info, sets weapon options, re-enables add firing point button
 
+			self.dqvname = document.getElementById('dqvname').value;
 			self.city = document.getElementById('city').value;
 			self.date = document.getElementById('datepicker').value;
 			self.date = $.datepicker.formatDate("yy-mm-dd", new Date(self.date));
@@ -133,6 +138,7 @@
 			}
 
 			self.session = {
+				"name": self.dqvname,
 				"city": self.city, 
 				"date": self.date, 
 				"personnel": self.personnel.split(','), 
@@ -148,7 +154,6 @@
 			
 			if(self.started === false){
 				self.addFiringPoint();
-				// mapControl.newFiringPointFocus(self.fpID);
 				self.started = true;
 			}			
 			
@@ -159,6 +164,8 @@
 		};
 
 		this.calcDetection = function(){
+
+			//calculates overall detectino rate info
 
 			var detected = 0;
 			var missed = 0;
@@ -297,6 +304,8 @@
 
 		this.calcDetection = function(){
 
+			//calculate detection rate for firing point
+
 			var detected = 0;
 			var missed = 0;
 			var mislocated= 0;
@@ -318,6 +327,8 @@
 		}
 
 		this.focusMap = function(){
+
+			//focus map to entered coordinates
 			
 			self.lat = parseFloat(document.getElementById('lat_firingPoint' + fpID).value);
 			self.lng = parseFloat(document.getElementById('long_firingPoint' + fpID).value);
@@ -328,6 +339,10 @@
 				
 			} else {
 				mapControl.centerFiringPoint(self.lat, self.lng);
+				for(var i = 0; i < self.shots.length; i++){
+					self.shots[i].calculateDistanceFromFP();
+					view.addLatLongToShot(self.shots[i].shotID, self.shots[i].fpID, self.shots[i].lat, self.shots[i].lng, self.shots[i].distance);
+				}
 			};
 			self.mapFocused = true;
 		}
@@ -353,17 +368,18 @@
 		this.focusMapButtonEvent();
 	}
 
-	function Shot(shotID, fpID, weapons, fpLat, fpLng){
-		//Shot class		
+	function Shot(shotID, fpID, weapons){
+		//Shot class	
+
+		this.shotID = shotID;	
+		this.fpID = fpID;
 		this.weapon;
 		this.rounds;
 		this.timestamp;
 		this.flexID;
-		this.fpLat = fpLat;
-		this.fpLng = fpLng;
 		this.lat;
 		this.lng;
-		this.comments;
+		this.comments = '';
 		this.JSON;
 		this.inList = false;
 		this.weaponList = [];
@@ -373,16 +389,20 @@
 		
 		var self = this;
 
+		// this.toString = function(){
+		// 	return 'This Shot ID: ' + self.shotID;
+		// }
+
 		this.getTime = function(){
 			//Gets system time
 			//TODO:  change to db request for db server time
 
 			var d = new Date();
 			var time = d.toTimeString().split(' ')[0];
-			view.addShotTimestamp(shotID, fpID, time);
+			view.addShotTimestamp(self.shotID, fpID, time);
 			
-			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_getTime').disabled = true;
-			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_timeStamp').readOnly = true;
+			document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_getTime').disabled = true;
+			document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_timeStamp').readOnly = true;
 			self.save();
 
 		};
@@ -392,56 +412,70 @@
 		this.addTimestampEventListener = function(){
 			//adds listener for timestamp button
 
-			var button_Timestamp = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_getTime');		
+			var button_Timestamp = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_getTime');		
 			button_Timestamp.addEventListener('click', this.getTime, false);
 		};
 
 		this.addSaveEventListener = function(){
 			//adds listener for save event button
 
-			var button_Save = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_save');
+			var button_Save = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_save');
 			button_Save.addEventListener('click', this.save, false);
 		};
 
 		this.removeSaveEventListener = function(){
 			//removes listener for save event button
 
-			var button_Save = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_save');
+			var button_Save = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_save');
 			button_Save.removeEventListener('click', this.save, false);
 		};
 
 		this.addEditEventListener = function(){
 			//adds listener for edit event button
 
-			var button_Save = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_save');
+			var button_Save = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_save');
 			button_Save.addEventListener('click', this.edit, false);
 		};
 
 		this.removeEditEventListener = function(){
 			//removes listener for edit event button
 
-			var button_Save = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_save');
-			button_Save.removeEventListener('click', this.edit, false);
+			var button_delete = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_save');
+			button_delete.removeEventListener('click', this.edit, false);
 		};
+
+		this.addDeleteEventListener = function(){
+			//adds listener for edit event button
+
+			var button_delete = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_delete');
+			button_delete.addEventListener('click', this.deleteShot, false);
+		};
+
+		// this.removeDeleteEventListener = function(){
+		// 	//removes listener for edit event button
+
+		// 	var button_Save = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_delete');
+		// 	button_Save.removeEventListener('click', this.deleteShot, false);
+		// };
 
 		this.addDisableNewShotEventListener = function(){
 			//adds disable new shot event listener to save button
 
-			var button_Save = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_save');
+			var button_Save = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_save');
 			button_Save.addEventListener('click', this.disableAddShotButton, false);
 		};
 
 		this.removeDisableNewShotEventListener = function(){
 			//removes disable new shot event listener to save button
 
-			var button_Save = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_save');
+			var button_Save = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_save');
 			button_Save.removeEventListener('click', this.disableAddShotButton, false);
 		};
 
 		this.disableAddShotButton = function(){
 			//diables add shot button and removes event listener for disabling new shot
 
-			view.disableAddShotButton(fpID);
+			view.disableAddShotButton(self.fpID);
 			self.removeDisableNewShotEventListener();
 		};
 
@@ -450,9 +484,9 @@
 		this.save = function(){
 			//saves Dom input info to field variables, formats JSON, handles event listener states
 
-			self.weapon = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_weapon').value;
-			self.rounds = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_rounds').value;
-			self.timestamp = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_timeStamp').value;
+			self.weapon = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_weapon').value;
+			self.rounds = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_rounds').value;
+			self.timestamp = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_timeStamp').value;
 
 		// Simulation === gets gps coordinates --------------------------------------
 			//TODO:  Db query to check for related incidents
@@ -461,7 +495,7 @@
 				self.coordinates = shotSimulation.getGPS();
 				
 				if(confirm('Flex ID ' + self.coordinates[0] + '?')){
-					var shot = document.getElementById('fp_' + fpID + '_shot_'+ shotID +'_flexID'); 
+					var shot = document.getElementById('fp_' + self.fpID + '_shot_'+ self.shotID +'_flexID'); 
 					shot.value = self.coordinates[0];
 					self.flexID = self.coordinates[0];					
 					self.lat = self.coordinates[1];
@@ -470,14 +504,14 @@
 				}
 				
 			} else {
-				self.lat = parseFloat(document.getElementById('fp_' + fpID + '_shot_' + shotID + '_lat').value);
-				self.lng = parseFloat(document.getElementById('fp_' + fpID + '_shot_' + shotID + '_lng').value);
+				self.lat = parseFloat(document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_lat').value);
+				self.lng = parseFloat(document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_lng').value);
 				self.createMarker();
 			}
 
 			//-----------------------------------------------------------------------
 			
-			var ID = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_flexID');
+			var ID = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_flexID');
 
 			if (ID.value === ''){
 
@@ -490,14 +524,14 @@
 
 				self.flexID = ID.value;
 				self.calculateDistanceFromFP();
-				view.addLatLongToShot(shotID, fpID, self.lat, self.lng, self.distance);
+				view.addLatLongToShot(self.shotID, self.fpID, self.lat, self.lng, self.distance);
 			};
 
-			self.comments = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_comments').value;
+			self.comments = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID + '_comments').value;
 
 			self.JSON = {
-				// "firingPoint": "Firing Point " + fpID,
-				"shot": shotID,
+				// "firingPoint": "Firing Point " + self.fpID,
+				"shot": self.shotID,
 				"weapon": self.weapon, 
 				"rounds": self.rounds, 
 				"timestamp": self.timestamp, 
@@ -508,20 +542,20 @@
 				"comments": self.comments
 			};
 
-			document.getElementById('addShot' + fpID).disabled = false;
+			document.getElementById('addShot' + self.fpID).disabled = false;
 			self.removeSaveEventListener();
 			self.addEditEventListener();
-			view.disableShotsEditing(shotID, fpID);	
+			view.disableShotsEditing(self.shotID, self.fpID);	
 			if(self.inList === false){
-				view.moveShotToList(shotID, fpID);	
+				view.moveShotToList(self.shotID, self.fpID);	
 				self.inList = true;
 			};
 
 			//Calculates Firing point and global detection rates
 			dqv.calcDetection();
-			dqv.firingPoints[fpID - 1].calcDetection();
+			dqv.firingPoints[self.fpID - 1].calcDetection();
 			view.showDetectionRate();
-			view.showFiringPointDetectionRate(fpID);						
+			view.showFiringPointDetectionRate(self.fpID);						
 		};
 
 		this.edit = function(){
@@ -529,11 +563,71 @@
 
 			self.removeEditEventListener();
 			self.addSaveEventListener();
-			view.enableShotsEditing(shotID, fpID);
+			view.enableShotsEditing(self.shotID, self.fpID);
 			self.populateWeaponMenu();
 		};
 
+		this.deleteShot = function(){
+
+			//deletes shot and re-renders shot list with corrected shot ID's
+			
+			if(confirm('Delete shot ' + self.shotID + '?')){
+				view.removeShotFromList(self.shotID, self.fpID);	
+				
+				//removes map marker
+				if(self.marker){
+					self.marker.setMap(null);
+				}
+
+
+				//removes shot from firing point shots array
+				var fpArray = dqv.firingPoints[self.fpID - 1].shots;								
+				fpArray.splice(self.shotID - 1, 1);				
+
+				//resets shot ID numbers and re-renders shot to dom shotlist for all shots
+				for (var i = 0; i < fpArray.length; i++){
+					
+					//removes shot from dom
+					view.removeShotFromList(fpArray[i].shotID, fpArray[i].fpID);
+					
+					//sets new shot ID 
+					fpArray[i].shotID = i + 1;
+					
+					//renders shot do dom shotlist					
+					view.renderToList(fpArray[i].shotID, fpArray[i].fpID, fpArray[i].timestamp, fpArray[i].flexID, fpArray[i].lat, fpArray[i].lng, fpArray[i].distance, fpArray[i].comments)
+					
+					//populates weapon select, assigns value to weapon and rounds TODO: refactor
+					var x = document.getElementById('fp_' + fpArray[i].fpID + '_shot_' + fpArray[i].shotID +'_weapon');	
+					for (var k = 0; k < view.weaponList.length; k++){
+				
+						var w = document.createElement('option');
+						w.text = view.weaponList[k];					
+						x.add(w);
+					};		 
+
+					x.value = fpArray[i].weapon;
+					document.getElementById('fp_' + fpArray[i].fpID + '_shot_' + fpArray[i].shotID + '_rounds').value = fpArray[i].rounds;
+					fpArray[i].inList = true;
+
+					//sets event listeners for new dom render
+					view.disableShotsEditing(fpArray[i].shotID, fpArray[i].fpID);
+					fpArray[i].addEditEventListener();
+					fpArray[i].addDeleteEventListener();
+
+				};
+				
+				//re-Calculates Firing point and global detection rates
+				dqv.calcDetection();
+				dqv.firingPoints[fpID - 1].calcDetection();
+				view.showDetectionRate();
+				view.showFiringPointDetectionRate(fpID);		
+				
+			}
+
+		}
+
 		this.createMarker = function(){
+			//removes map marker if it exists, then renders with new coordinates
 
 			if(self.marker){
 				self.marker.setMap(null);
@@ -550,7 +644,7 @@
 		this.populateWeaponMenu = function(){
 			//populates shot menu with DQV info weapon settings
 
-			var x = document.getElementById('fp_' + fpID + '_shot_' + shotID +'_weapon');			
+			var x = document.getElementById('fp_' + self.fpID + '_shot_' + self.shotID +'_weapon');			
 
 			for (var i = 0; i < view.weaponList.length; i++){
 				
@@ -567,10 +661,10 @@
 			//Calculates distance in meters from Firing Point coordinates
 			
 			var R = 6371000;
-			var radLat1 = toRad(self.fpLat);
+			var radLat1 = toRad(dqv.firingPoints[fpID - 1].lat);
 			var radLat2 = toRad(self.lat);
-			var radLatDiff = toRad(self.lat - self.fpLat);
-			var radLngDiff = toRad(self.fpLng - self.lng);
+			var radLatDiff = toRad(self.lat - dqv.firingPoints[fpID -1].lat);
+			var radLngDiff = toRad(dqv.firingPoints[fpID - 1].lng - self.lng);
 			
 			var a = Math.sin(radLatDiff/2) * Math.sin(radLatDiff/2) +
 					Math.cos(radLat1) * Math.cos(radLat2) *
@@ -586,6 +680,7 @@
 
 		this.addTimestampEventListener();
 		this.addSaveEventListener();
+		this.addDeleteEventListener();
 		this.populateWeaponMenu();
 	}
 
@@ -670,8 +765,11 @@
 			'<input class="inputs" type="text" name="dist" id="fp_' + fpID + '_shot_' + shotID + '_dist" value="" style="width:50px; display:none"> ' +
 			'Comments: <input class="inputs" type="text" name="Comments" id="fp_' + fpID + '_shot_'+ shotID +'_comments" value="">   ' +
 			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_getTime"><i class="fa fa-dot-circle-o"></i> Shot </button>  ' +			
-			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_save" style="display: none"><i class="fa fa-floppy-o"></i> Save </button><br><br> ' 
+			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_save" style="display: none"><i class="fa fa-floppy-o"></i> Save </button> ' +
+			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_delete" style="display: none"><i class="fa fa-minus-circle"></i> Delete </button><br><br> ' 
 		},
+
+		
 
 		addShotTimestamp: function(shotID, fpID, time){
 			//Adds shot timestamp info to DOM
@@ -691,6 +789,7 @@
 			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_lng').readOnly = true;
 			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_comments').readOnly = true;
 			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_save').innerHTML = '<i class="fa fa-pencil-square-o"></i> Edit ';
+			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_delete').style.display = "none";
 		},
 
 		enableShotsEditing:  function(shotID, fpID){
@@ -698,7 +797,7 @@
 
 			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_weapon').disabled = false;
 			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_rounds').disabled = false;
-			// document.getElementById('fp_' + fpID + '_shot_' + shotID + '_timeStamp').readOnly = false;
+			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_timeStamp').readOnly = false;
 			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_flexID').readOnly = false;
 			//document.getElementById('fp_' + fpID + '_shot_' + shotID + '_getTime').disabled = false;
 			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_lat').readOnly = false;
@@ -706,11 +805,14 @@
 
 			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_comments').readOnly = false;
 			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_save').innerHTML = '<i class="fa fa-floppy-o"></i> Save ';
+			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_delete').style.display = "inline";
+
 		},
 
 		disableDQVInfoEditing: function(){
 			//Disables DQV Info Editing	
 
+			document.getElementById('dqvname').readOnly = true;
 			document.getElementById('city').readOnly = true;
 			document.getElementById('datepicker').readOnly = true;
 			document.getElementById('personnel').readOnly = true;
@@ -726,6 +828,7 @@
 		enableDQVInfoEditing: function(){
 			//Enables DQV Info Editing
 
+			document.getElementById('dqvname').readOnly = false;
 			document.getElementById('city').readOnly = false;
 			document.getElementById('datepicker').readOnly = false;
 			document.getElementById('personnel').readOnly = false;
@@ -757,8 +860,73 @@
 			dist.style.display = "inline";
 			dist.readOnly = true;
 
+			
+
 			shotList.appendChild(shot);
 		},
+
+		removeShotFromList: function(shotID, fpID){
+			var SL = document.querySelector("#shotList" + fpID);
+			
+			var shotDiv = document.getElementById('shot' + shotID + 'fp_' + fpID);
+			SL.removeChild(shotDiv);
+
+		},
+
+		renderToList: function(shotID, fpID, timestamp, flexID, lat, lng, dist, comments){
+			
+			//renders completed shot to shotlist .... need to re-use/re-factor for loading session as well
+
+			var dist = (dist) ? dist.toFixed(2) : '';
+			var shotNumber = (shotID < 10) ? '0' + shotID: shotID;
+
+			var FP = document.querySelector("#shotList" + fpID);
+			var shotDiv = document.createElement('DIV');
+			shotDiv.id = 'shot' + shotID + 'fp_' + fpID;
+			shotDiv.className = 'shots';
+						
+			if(shotID % 2 !== 0){
+				shotDiv.style.backgroundColor = "#e5f0ff";
+			}
+			// var first = FP.firstChild;
+			FP.appendChild(shotDiv);
+			shotDiv.innerHTML = shotNumber + ': Weapon: <select id="fp_' + fpID + '_shot_' + shotID +'_weapon"> ' +
+			'</select>    ' +
+			'Rounds: <select id="fp_' + fpID + '_shot_'+ shotID +'_rounds">' +
+			'<option value="3">3</option>' +
+			'<option value="1">1</option>' +		
+			'</select>    ' +
+			'TimeStamp: <input class="inputs" type="text" name="TimeStamp" id="fp_' + fpID + '_shot_'+ shotID +'_timeStamp" value="'+ timestamp + ' "style="width:60px">    ' +
+			'<input class="inputs" type="text" name="FlexID" id="fp_' + fpID + '_shot_'+ shotID +'_flexID" value="' + flexID + '" style="width:60px; display:none">   ' +
+			'<input class="inputs" type="text" name="lat" id="fp_' + fpID + '_shot_' + shotID + '_lat" value="'+ lat + '" style="width:75px; display:none"> ' +
+			'<input class="inputs" type="text" name="long" id="fp_' + fpID + '_shot_' + shotID + '_lng" value="' + lng + '" style="width:75px; display:none"> ' +
+			'<input class="inputs" type="text" name="dist" id="fp_' + fpID + '_shot_' + shotID + '_dist" value="' + dist + '" style="width:50px; display:none"> ' +
+			'Comments: <input class="inputs" type="text" name="Comments" id="fp_' + fpID + '_shot_'+ shotID +'_comments" value="' + comments + '">   ' +
+			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_getTime"><i class="fa fa-dot-circle-o"></i> Shot </button>  ' +			
+			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_save" style="display: none"><i class="fa fa-floppy-o"></i> Save </button> ' +
+			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_delete" style="display: none"><i class="fa fa-minus-circle"></i> Delete </button><br><br> ' 
+			
+			
+			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_save').style.display = "inline";
+			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_flexID').style.display = "inline";
+
+			document.getElementById('fp_' + fpID + '_shot_' + shotID + '_getTime').style.display = "none";
+			var lat = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_lat');
+			lat.style.display = "inline";
+			lat.readOnly = true;
+			var lng = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_lng');
+			lng.style.display = "inline";
+			lng.readOnly = true;
+
+			var dist = document.getElementById('fp_' + fpID + '_shot_' + shotID + '_dist');
+			dist.style.display = "inline";
+			dist.readOnly = true;
+			
+
+
+
+		},
+
 
 		disableAddShotButton: function(fpID){
 			//disables add shot button
@@ -766,6 +934,7 @@
 			document.getElementById('addShot' + fpID).disabled = true;
 		},
 
+		// Global weaponlist TODO: do something else here
 		weaponList: [],
 
 		addLatLongToShot: function(shotID, fpID, lat, lng, dist){
