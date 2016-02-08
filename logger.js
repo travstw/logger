@@ -341,6 +341,8 @@
 				mapControl.centerFiringPoint(self.lat, self.lng);
 				for(var i = 0; i < self.shots.length; i++){
 					self.shots[i].calculateDistanceFromFP();
+					self.calcDetection();
+					view.showFiringPointDetectionRate(fpID);
 					view.addLatLongToShot(self.shots[i].shotID, self.shots[i].fpID, self.shots[i].lat, self.shots[i].lng, self.shots[i].distance);
 				}
 			};
@@ -714,26 +716,24 @@
 			// fpDiv.classList.add('active-tab');
 			FPC.appendChild(fpDiv);
 			fpDiv.innerHTML =  	'<div>'+
-									'<fieldset class="fieldSet">'+
-										'<legend> Firing Point ' + fpID + ' </legend>'+
-											'<div id="fp">'+		
-												'  Name: <input class="inputs" type="text" name="Name" id="name_firingPoint'+ fpID +'" value="">'+
-												'  Lat: <input class="inputs" type="text" name="Lat" id="lat_firingPoint' + fpID + '" value="44.776096" style="width:75px">'+
-												'  Long: <input class="inputs" type="text" name="Long" id="long_firingPoint'+ fpID + '" value="-68.766063" style="width:75px">'+
-												' <button class="pure-button button" type="button" id="focusMap' + fpID + '"><i class="fa fa-map-marker"></i> Focus Map </button>' +
-												'  Comments:  <input class="inputs" type="text" name="FP_Comments" id="FP_comments' + fpID + '"value=""> ' +
-												' Detection Rate: <input class="inputs type="text" style="width:50px" name="det rate" id="detRate' + fpID + '"" readOnly><br><br> ' +
-												'Shots:  <button class="pure-button button" type="button" id="addShot' + fpID + '"><i class="fa fa-plus-circle"></i> Add</button><br>'+
-													 '<div id="spacer" style="height:20px"> ' +
-													'<div id="shots' + fpID + '"></div> ' +
-													 '</div> ' +
-												// 
-												'<br><br> '+
-											'</div>'+
-			
-										'<div class="shotList" id="shotList' + fpID + '"></div>' +
-									'</fieldset>'+
-								'</div><br>'
+				'<fieldset class="fieldSet">'+
+				'<legend> Firing Point ' + fpID + ' </legend>'+
+				'<div id="fp">'+		
+				'  Name: <input class="inputs" type="text" name="Name" id="name_firingPoint'+ fpID +'" value="">'+
+				'  Lat: <input class="inputs" type="text" name="Lat" id="lat_firingPoint' + fpID + '" value="44.776096" style="width:75px">'+
+				'  Long: <input class="inputs" type="text" name="Long" id="long_firingPoint'+ fpID + '" value="-68.766063" style="width:75px">'+
+				' <button class="pure-button button" type="button" id="focusMap' + fpID + '"><i class="fa fa-map-marker"></i> Focus Map </button>' +
+				'  Comments:  <input class="inputs" type="text" name="FP_Comments" id="FP_comments' + fpID + '"value=""> ' +
+				' Detection Rate: <input class="inputs type="text" style="width:50px" name="det rate" id="detRate' + fpID + '"" readOnly><br><br> ' +
+				'Shots:  <button class="pure-button button" type="button" id="addShot' + fpID + '"><i class="fa fa-plus-circle"></i> Add</button><br>'+
+				'<div id="spacer" style="height:20px"> ' +
+				'<div id="shots' + fpID + '"></div> ' +
+				'</div> ' +
+				'<br><br> '+
+				'</div>'+
+				'<div class="shotList" id="shotList' + fpID + '"></div>' +
+				'</fieldset>'+
+				'</div><br>'
 		},
 
 		addShotToDom: function(shotID, fpID){
@@ -753,20 +753,20 @@
 			var first = FP.firstChild;
 			FP.insertBefore(shotDiv, first);
 			shotDiv.innerHTML = shotNumber + ': Weapon: <select id="fp_' + fpID + '_shot_' + shotID +'_weapon">' +
-			'</select>    ' +
-			'Rounds: <select id="fp_' + fpID + '_shot_'+ shotID +'_rounds">' +
-			'<option value="3">3</option>' +
-			'<option value="1">1</option>' +		
-			'</select>    ' +
-			'TimeStamp: <input class="inputs" type="text" name="TimeStamp" id="fp_' + fpID + '_shot_'+ shotID +'_timeStamp" value="" style="width:60px">    ' +
-			'<input class="inputs" type="text" name="FlexID" id="fp_' + fpID + '_shot_'+ shotID +'_flexID" value="" style="width:60px; display:none">   ' +
-			'<input class="inputs" type="text" name="lat" id="fp_' + fpID + '_shot_' + shotID + '_lat" value="" style="width:75px; display:none"> ' +
-			'<input class="inputs" type="text" name="long" id="fp_' + fpID + '_shot_' + shotID + '_lng" value="" style="width:75px; display:none"> ' +
-			'<input class="inputs" type="text" name="dist" id="fp_' + fpID + '_shot_' + shotID + '_dist" value="" style="width:50px; display:none"> ' +
-			'Comments: <input class="inputs" type="text" name="Comments" id="fp_' + fpID + '_shot_'+ shotID +'_comments" value="">   ' +
-			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_getTime"><i class="fa fa-dot-circle-o"></i> Shot </button>  ' +			
-			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_save" style="display: none"><i class="fa fa-floppy-o"></i> Save </button> ' +
-			'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_delete" style="display: none"><i class="fa fa-minus-circle"></i> Delete </button><br><br> ' 
+				'</select>    ' +
+				'Rounds: <select id="fp_' + fpID + '_shot_'+ shotID +'_rounds">' +
+				'<option value="3">3</option>' +
+				'<option value="1">1</option>' +		
+				'</select>    ' +
+				'TimeStamp: <input class="inputs" type="text" name="TimeStamp" id="fp_' + fpID + '_shot_'+ shotID +'_timeStamp" value="" style="width:50px">    ' +
+				'<input class="inputs" type="text" name="FlexID" id="fp_' + fpID + '_shot_'+ shotID +'_flexID" value="" style="width:45px; display:none">   ' +
+				'<input class="inputs" type="text" name="lat" id="fp_' + fpID + '_shot_' + shotID + '_lat" value="" style="width:65px; display:none"> ' +
+				'<input class="inputs" type="text" name="long" id="fp_' + fpID + '_shot_' + shotID + '_lng" value="" style="width:65px; display:none"> ' +
+				'<input class="inputs" type="text" name="dist" id="fp_' + fpID + '_shot_' + shotID + '_dist" value="" style="width:45px; display:none"> ' +
+				'Comments: <input class="inputs" type="text" name="Comments" id="fp_' + fpID + '_shot_'+ shotID +'_comments" value="" style="width:75px">   ' +
+				'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_getTime"><i class="fa fa-dot-circle-o"></i> Shot </button>  ' +			
+				'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_save" style="display: none"><i class="fa fa-floppy-o"></i> Save </button> ' +
+				'<button class="pure-button" type="button" id="fp_' + fpID + '_shot_' + shotID + '_delete" style="display: none"><i class="fa fa-minus-circle"></i> Delete </button><br><br> ' 
 		},
 
 		
