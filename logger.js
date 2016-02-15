@@ -345,6 +345,8 @@
 					view.showFiringPointDetectionRate(fpID);
 					view.addLatLongToShot(self.shots[i].shotID, self.shots[i].fpID, self.shots[i].lat, self.shots[i].lng, self.shots[i].distance);
 				}
+				dqv.calcDetection();
+				view.showDetectionRate();
 			};
 			self.mapFocused = true;
 		}
