@@ -49,6 +49,8 @@
 
 	var dqv = new DQV();
 
+
+
 	function DQV(){
 
 		//DQV Session Class	
@@ -253,6 +255,8 @@
 		this.addSaveInfoButtonEvent();
 	}
 
+
+
 	function FiringPoint(fpID, weapons){
 		//Firing Point Class
 
@@ -371,6 +375,7 @@
 		this.addShotButtonEvent();
 		this.focusMapButtonEvent();
 	}
+
 
 	function Shot(shotID, fpID, weapons){
 		//Shot class	
