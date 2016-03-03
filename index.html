@@ -23,9 +23,15 @@
 			    map = new google.maps.Map(document.getElementById('map'), {
 			    center: {lat: 37.539028, lng: -122.064272},
 			    zoom: 18,
+			    mapTypeControl: false,
+			    fullscreenControl: true,
+			    streetViewControl: false,
+			    tilt: 0,
 			    mapTypeId:google.maps.MapTypeId.HYBRID
 			    });
-			    map.setTilt(0);
+			    // map.setTilt(0);
+
+
 			    circle = new google.maps.Circle({
 						center: map.center,
 						radius:25,
@@ -37,6 +43,8 @@
 			  			
 			  			
 						});
+
+			    
 			    // var image = 'https://s3.amazonaws.com/sst-logger/TargetSmall.png';
 			    var image = {
 							  url: 'https://s3.amazonaws.com/sst-logger/TargetSmall.png',
@@ -111,22 +119,26 @@
 			  			Personnel:
 			  			<input class="inputs" type="text" name="personnel" id="personnel" value="" style="width:368px"><br>
 			  			Weapons:
-			  			<input class="inputs" type="checkbox" name="9mm" id="9mm" value="9mm" checked> 9mm  
-			  			<input class="inputs" type="checkbox" name=".40" id=".40" value=".40" checked> .40
-			  			<input class="inputs" type="checkbox" name=".45" id=".45" value=".45"> .45
-			  			<!-- <input type="checkbox" name=".38" id=".38" value=".38">.38 -->
+			  			<input class="inputs" type="checkbox" name="9mm" id="9mm" value="9mm" checked> 9mm  |  
+			  			<input class="inputs" type="checkbox" name=".40" id=".40" value=".40" checked> .40  |
+			  			<input class="inputs" type="checkbox" name=".45" id=".45" value=".45"> .45  |
+			  			<input class="inputs" type="checkbox" name=".38" id=".38" value=".38"> .38  | 
+			  			<input class="inputs" type="checkbox" name=".223" id=".223" value=".223"> .223  | 
+			  			<input class="inputs" type="checkbox" name="shotgun" id="shotgun" value="shotgun"> shotgun  |
+			  			
+
 			  			<input class="inputs" type="checkbox" name="other" id="other" value=""> Other  <input class="inputs" type="textbox" name="other" id="otherWeapon" style="width:206px"><br>  
 
 			  			Comments:
 			  			<input class="inputs" type="textbox" name="comments" id="comment_DQV" value = "" style="width:363px"><br>
 			  			Detected:
-			  			<input class="inputs" type="textbox" name="detected" id="detected" value = "" style="width:30px" readOnly>
+			  			<input class="inputs" type="textbox" name="detected" id="detected" value = "0" style="width:30px" readOnly>
 			  			Missed:
-			  			<input class="inputs" type="textbox" name="missed" id="missed" value = "" style="width:30px" readOnly>
+			  			<input class="inputs" type="textbox" name="missed" id="missed" value = "0" style="width:30px" readOnly>
 			  			Mislocated:
-			  			<input class="inputs" type="textbox" name="mislocated" id="mislocated" value = "" style="width:30px" readOnly>
+			  			<input class="inputs" type="textbox" name="mislocated" id="mislocated" value = "0" style="width:30px" readOnly>
 			  			Detection Rate:
-			  			<input class="inputs" type="textbox" name="detectionrate" id="detection_rate" value = "" style="width:50px" readOnly><br><br>
+			  			<input class="inputs" type="textbox" name="detectionrate" id="detection_rate" value = "0%" style="width:50px" readOnly><br><br>
 
 			  			<!-- Weather: -->
 			  			<!-- <input class="inputs" type="textbox" name="weather" id="weather" value = "" style="width:400px"><br><br> -->
