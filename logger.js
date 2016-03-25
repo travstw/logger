@@ -435,9 +435,7 @@
 		
 		var self = this;
 
-		// this.toString = function(){
-		// 	return 'This Shot ID: ' + self.shotID;
-		// }
+		
 
 		this.getTime = function(){
 			//Gets system time
