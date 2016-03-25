@@ -435,7 +435,7 @@
 		
 		var self = this;
 
-		
+		//
 
 		this.getTime = function(){
 			//Gets system time
