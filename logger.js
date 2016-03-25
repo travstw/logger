@@ -172,7 +172,7 @@
 
 		this.calcDetection = function(){
 
-			//calculates overall detectino rate info
+			//calculates overall detection rate info
 
 			var detected = 0;
 			var missed = 0;
