@@ -377,7 +377,7 @@
 				self.mapHidden = true;
 				console.log('true');
 			} else {
-				document.getElementById('map').style.height = '350px';
+				document.getElementById('map').style.height = '300px';
 				document.getElementById('hideMap' + fpID).innerHTML = 'Hide Map';
 				self.mapHidden = false;
 				console.log('false')

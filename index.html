@@ -22,7 +22,7 @@
 			function initMap() {
 			    map = new google.maps.Map(document.getElementById('map'), {
 			    center: {lat: 37.539028, lng: -122.064272},
-			    zoom: 18,
+			    zoom: 16,
 			    mapTypeControl: false,
 			    fullscreenControl: true,
 			    streetViewControl: false,
@@ -130,7 +130,9 @@
 			  			<input class="inputs" type="checkbox" name="other" id="other" value=""> Other  <input class="inputs" type="textbox" name="other" id="otherWeapon" style="width:206px"><br>  
 
 			  			Comments:
-			  			<input class="inputs" type="textbox" name="comments" id="comment_DQV" value = "" style="width:363px"><br>
+			  			<input class="inputs" type="textarea" name="comments" id="comment_DQV" value = "" style="width:363px; height:50px"><br>
+			  			
+			  			<br>
 			  			Detected:
 			  			<input class="inputs" type="textbox" name="detected" id="detected" value = "0" style="width:30px" readOnly>
 			  			Missed:
@@ -138,12 +140,13 @@
 			  			Mislocated:
 			  			<input class="inputs" type="textbox" name="mislocated" id="mislocated" value = "0" style="width:30px" readOnly>
 			  			Detection Rate:
-			  			<input class="inputs" type="textbox" name="detectionrate" id="detection_rate" value = "0%" style="width:50px" readOnly><br><br>
-
+			  			<input class="inputs" type="textbox" name="detectionrate" id="detection_rate" value = "0%" style="width:50px" readOnly>
+			  			<br>
 			  			<!-- Weather: -->
 			  			<!-- <input class="inputs" type="textbox" name="weather" id="weather" value = "" style="width:400px"><br><br> -->
 			  			<button class="pure-button button" type="button" id="saveInfo"><i class="fa fa-floppy-o"></i> Start DQV Session </button>
 			  			<button class="pure-button button" type="button" id="saveSession"><i class="fa fa-floppy-o"></i> Export Session </button>
+			  		
 
 			  		</fieldset><br>
 	  				<form>
